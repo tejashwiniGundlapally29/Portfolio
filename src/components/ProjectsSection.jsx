@@ -10,25 +10,25 @@ const projects = [
     image: "/projects/project1.png",
     tags: ["Python", "TTS", "OpenCV", "Barcode Scanner"],
     demoUrl: "/project/1", // custom page
-    githubUrl: null, // remove GitHub
+    githubUrl: null, // removed GitHub link
   },
-{
-  id: 2,
-  title: "Talking to a MACHINE",
-  description:
-    "CNN + LSTM model that answers questions about an image using AI and deep learning.",
-  image: "/projects/project2.png", // make sure this image exists in /public/projects/
-  tags: ["Python", "TensorFlow", "Keras", "Deep Learning", "CNN", "LSTM"],
-  demoUrl: "/project2", // ✅ update this to match the new route
-  githubUrl: null, // keep null if you don’t want to show a GitHub link
-},
+  {
+    id: 2,
+    title: "Talking to a MACHINE",
+    description:
+      "CNN + LSTM model that answers questions about an image using AI and deep learning.",
+    image: "/projects/project2.png", // make sure this image exists in /public/projects/
+    tags: ["Python", "TensorFlow", "Keras", "Deep Learning", "CNN", "LSTM"],
+    demoUrl: "/project2", // ✅ updated route
+    githubUrl: "https://github.com/tejashwiniGundlapally29/Talking-to-Machine.git",
+  },
   {
     id: 3,
     title: "E-commerce Platform",
     description:
       "Full-featured e-commerce platform with user authentication and payment processing.",
     image: "/projects/project3.png",
-    tags: ["React", "Node.js", "Stripe"],
+    tags: ["React", "Java", "Spring Boot"],
     demoUrl: "#",
     githubUrl: "#",
   },
@@ -91,6 +91,7 @@ export const ProjectsSection = () => {
                       <a
                         href={project.githubUrl}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="text-foreground/80 hover:text-primary transition-colors duration-300"
                       >
                         <Github size={20} />
@@ -107,6 +108,7 @@ export const ProjectsSection = () => {
           <a
             className="cosmic-button w-fit flex items-center mx-auto gap-2"
             target="_blank"
+            rel="noopener noreferrer"
             href="https://github.com/tejashwiniGundlapally29"
           >
             Check My Github <ArrowRight size={16} />

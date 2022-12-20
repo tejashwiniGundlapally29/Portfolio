@@ -173,7 +173,7 @@ export const Project1Detail = () => {
           className="mt-16 mb-12 flex justify-center"
         >
           <a
-            href="https://github.com/yourusername/yourproject"
+            href="https://github.com/tejashwiniGundlapally29/Shopping-assistance-for-visually-imapred.git"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-lg md:text-xl text-gray-300 hover:text-white transition"
