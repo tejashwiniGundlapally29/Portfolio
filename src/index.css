@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border: hsl(var(--border));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-card: hsl(var(--card));
+
+  --animate-fade-in: fade-in 0.7s ease-out forwards;
+  --animate-fade-in-delay-1: fade-in 0.7s ease-out 0.2s forwards;
+  --animate-fade-in-delay-2: fade-in 0.7s ease-out 0.4s forwards;
+  --animate-fade-in-delay-3: fade-in 0.7s ease-out 0.6s forwards;
+  --animate-fade-in-delay-4: fade-in 0.7s ease-out 0.8s forwards;
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --primary: 250 47% 60%;
+    --primary-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+
+    /* Hero text colors */
+    --name-color: #1f2937; /* dark gray for light mode */
+    --paragraph-color: #1f2937; /* dark gray for light mode */
+  }
+
+  .dark {
+    --background: 222 47% 4%;
+    --foreground: 213 31% 91%;
+    --card: 222 47% 8%;
+    --primary: 250 65% 65%;
+    --primary-foreground: 213 31% 91%;
+    --border: 217 33% 20%;
+
+    --name-color: #f9fafb; /* off-white for dark mode */
+    --paragraph-color: #f9fafb; /* off-white for dark mode */
+  }
+
+  * { @apply border-border; }
+  html { @apply scroll-smooth; }
+  body { 
+    @apply text-foreground transition-colors duration-300;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    background-color: hsl(var(--background)); /* light mode background */
+  }
+
+  .dark body {
+    background-color: #000; /* dark mode background */
+  }
+}
+
+/* Canvas background for falling squares */
+.star-background-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;        /* always behind content */
+  pointer-events: none; /* click-through */
+}
+
+/* Hero & portfolio content layering */
+#hero, .portfolio-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* --- HERO NAME --- */
+.hero-name {
+  font-family: 'Pacifico', cursive; /* stylish font */
+  font-size: 3rem;
+  font-weight: 400;
+  color: var(--name-color);
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+  white-space: nowrap;
+  overflow: hidden;
+}
+@keyframes letter-dance {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  20% { transform: translateY(-3px) rotate(-2deg); }
+  40% { transform: translateY(3px) rotate(2deg); }
+  60% { transform: translateY(-2px) rotate(-1deg); }
+  80% { transform: translateY(2px) rotate(1deg); }
+}
+
+.animate-letter {
+  display: inline-block;
+  animation: letter-dance 1.5s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.05s); /* staggered animation */
+}
+
+.animate-dance {
+  animation: dance 1.5s ease-in-out infinite;
+}
+
+/* Responsive hero name sizing */
+@media (min-width: 768px) {
+.hero-name {
+  font-family: 'Pacifico', cursive; /* stylish, unique */
+  font-size: 3rem; /* adjust as needed */
+  font-weight: 400; /* not too bold for cursive */
+  color: var(--name-color); /* supports light/dark mode */
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5); /* subtle shadow for depth */
+  white-space: nowrap;
+  overflow: hidden;
+}
+}
+@media (max-width: 1024px) {
+  .hero-name {
+    font-size: 2.2rem;
+  }
+}
+@media (max-width: 768px) {
+  .hero-name {
+    font-size: 1.8rem;
+  }
+}
+
+/* --- HERO PARAGRAPH --- */
+.hero-paragraph {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--foreground); /* same in dark/light mode */
+  max-width: 600px;          /* adjust as needed */
+  margin-bottom: 20px;
+  opacity: 1;                /* make visible by default */
+  transform: translateY(0);  /* reset any offset */
+  transition: all 1s ease-in-out;
+}
+
+/* on hover, reveal paragraph */
+.portfolio:hover .hero-paragraph {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slow scrolling name (optional, can remove if static) */
+@keyframes scroll-name-slowest {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+.animate-scroll-name-slowest {
+  display: inline-block;
+  animation: scroll-name-slowest 30s linear infinite;
+}
+
+/* Slide-up effect for intro & button */
+.group-hover\:translate-y-0 { transform: translateY(0); }
+.group-hover\:opacity-100 { opacity: 1; }
+.transition-all { transition: all 0.7s ease-in-out; }
+.transform { transform: translateY(6px); }
+
+/* Restrict content max width */
+.max-w-md { max-width: 28rem; }
+@media (min-width: 768px) {
+  .md\:max-w-lg { max-width: 32rem; }
+}
+
+/* --- PORTFOLIO SECTION WITH PROFILE PHOTO --- */
+.portfolio {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: #000; /* fallback */
+}
+.portfolio::before {
+  content: "";
+  position: absolute;
+  top: 180px;
+  left: 12%;
+  width: 380px;
+  height: 380px;
+  background: url('profile.jpg') no-repeat center top;
+  background-size: contain;
+  z-index: 1;
+}
+.portfolio-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding-right: 80px;
+  text-align: right;
+}
+.portfolio h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #f9fafb;
+  margin-bottom: 20px;
+  white-space: nowrap;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.75);
+}
+.portfolio p {
+  font-size: 1.25rem;
+  color: #d1d5db;
+  max-width: 600px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 1s ease-in-out;
+}
+.portfolio:hover p {
+  opacity: 1;
+  transform: translateY(0);
+}
+.portfolio .btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin-top: 10px;
+}
+.portfolio .btn:hover {
+  background: #4338ca;
+}
