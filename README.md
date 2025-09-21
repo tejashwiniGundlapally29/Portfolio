@@ -9,7 +9,7 @@ A personal portfolio website showcasing my skills in Full Stack Development, Rea
 
 ## 🌐 Live Demo
 Check out my live portfolio:  
-[https://portfolio.vercel.app](https://portfolio.vercel.app)
+https://portfolio-git-main-tejashwinis-projects-3c0052bb.vercel.app?_vercel_share=1Ia6DFFXouypmR6936t4hedvPi6N8eNy
 
 ---
 
