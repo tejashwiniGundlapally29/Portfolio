@@ -6,6 +6,7 @@ import { useMediaQuery } from "react-responsive";
 
 // Example skills data
 const skills = [
+    { name: "Java", level: 90, category: "backend" },
   { name: "React", level: 90, category: "frontend" },
   { name: "JavaScript", level: 95, category: "frontend" },
   { name: "Node.js", level: 85, category: "backend" },
