@@ -2,10 +2,17 @@ import { PaperBackground } from "../components/PaperBackground";
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { FaGithub } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+const navItems = [
+  { name: "Projects", href: "projects" },
+  { name: "Contact", href: "contact" },
+];
 
 export const Project2Detail = () => {
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
+  const navigate = useNavigate();
 
   const isHeroInView = useInView(sectionRef, { once: true, rootMargin: "-100px" });
   const isContentInView = useInView(contentRef, { once: false, rootMargin: "-100px" });
@@ -14,6 +21,15 @@ export const Project2Detail = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Smooth scroll to section on main page
+  const scrollToSection = (id) => {
+    navigate("/"); // navigate to main page first
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }, 150); // wait for DOM to render
+  };
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden">
@@ -25,7 +41,7 @@ export const Project2Detail = () => {
         className="relative h-screen bg-center flex flex-col justify-center"
         style={{
           backgroundImage: "url('/projects/project2-bg.png')",
-          backgroundSize: "95%", // slightly zoomed out
+          backgroundSize: "95%",
           backgroundRepeat: "no-repeat",
         }}
       >
@@ -44,26 +60,21 @@ export const Project2Detail = () => {
           Talking to a Machine: Image Question Answering
         </motion.h1>
 
-        {/* Top Buttons */}
+        {/* Top Navigation Buttons */}
         <div className="absolute top-6 right-6 flex gap-4 z-20">
-          <button
-            onClick={() => {
-              const el = document.getElementById("projects");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="px-4 py-2 bg-primary text-white rounded-md shadow-md hover:bg-primary/80 transition"
-          >
-            My Work
-          </button>
-          <button
-            onClick={() => {
-              const el = document.getElementById("contact");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="px-4 py-2 bg-secondary text-white rounded-md shadow-md hover:bg-secondary/80 transition"
-          >
-            Contact
-          </button>
+          {navItems.map((item) => (
+            <button
+              key={item.href}
+              onClick={() => scrollToSection(item.href)}
+              className={`px-4 py-2 rounded-md shadow-md transition ${
+                item.name === "Contact"
+                  ? "bg-secondary text-white hover:bg-secondary/80"
+                  : "bg-primary text-white hover:bg-primary/80"
+              }`}
+            >
+              {item.name}
+            </button>
+          ))}
         </div>
       </div>
 

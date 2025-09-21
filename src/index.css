@@ -235,3 +235,6 @@
 .portfolio .btn:hover {
   background: #4338ca;
 }
+html {
+  scroll-behavior: smooth;
+}

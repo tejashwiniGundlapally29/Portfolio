@@ -2,11 +2,11 @@ import { PaperBackground } from "../components/PaperBackground";
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
-
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
+  { name: "Projects", href: "projects" }, // no '#' needed, we handle scroll via ID
+  { name: "Contact", href: "contact" },
 ];
 
 export const Project1Detail = () => {
@@ -16,14 +16,19 @@ export const Project1Detail = () => {
   const contentRef = useRef(null);
   const isContentInView = useInView(contentRef, { once: false, margin: "-100px" });
 
+  const navigate = useNavigate();
+
   // Scroll to top every time page loads
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const scrollToSection = (id) => {
-    const el = document.querySelector(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    navigate("/"); // go to main page
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }, 150); // wait for main page DOM to render
   };
 
   return (

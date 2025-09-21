@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Phone, Linkedin, Send } from "lucide-react";
+import { Mail, Linkedin, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { send } from "@emailjs/browser";
@@ -8,38 +8,39 @@ export const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const form = e.target;
 
-    send(
-      process.env.REACT_APP_EMAILJS_SERVICE_ID,
-      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
-      {
-        name: form.name.value,
-        email: form.email.value,
-        message: form.message.value,
-      },
-      process.env.REACT_APP_EMAILJS_PUBLIC_KEY
-    )
-      .then(() => {
-        toast({
-          title: "Message sent!",
-          description: "Thank you for your message. I'll get back to you soon.",
-        });
-        setIsSubmitting(false);
-        form.reset();
-      })
-      .catch((err) => {
-        toast({
-          title: "Error",
-          description: "Something went wrong. Please try again.",
-        });
-        console.error(err);
-        setIsSubmitting(false);
+    try {
+      await send(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+        {
+          name: form.name.value,
+          email: form.email.value,
+          message: form.message.value,
+        },
+        process.env.REACT_APP_EMAILJS_PUBLIC_KEY
+      );
+
+      toast({
+        title: "Message sent!",
+        description: "Thank you for your message. I'll get back to you soon.",
       });
+
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false); // ensure this always runs
+    }
   };
 
   return (
@@ -51,14 +52,12 @@ export const ContactSection = () => {
 
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
           Have a project in mind or want to collaborate? Feel free to reach out.
-          I'm always open to discussing new opportunities.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="flex flex-col md:flex-row gap-12">
           {/* Contact Info */}
-          <div className="space-y-8">
+          <div className="md:w-1/2 space-y-8">
             <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
-
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
                 <div className="p-3 rounded-full bg-primary/10">
@@ -74,13 +73,12 @@ export const ContactSection = () => {
                   </a>
                 </div>
               </div>
-
             </div>
 
             <div className="pt-8">
               <h4 className="font-medium mb-4">Connect With Me</h4>
               <div className="flex space-x-4 justify-start">
-                <a href="#" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.linkedin.com/in/tejashwini-g-/" target="https://www.linkedin.com/in/tejashwini-g-/" rel="noopener noreferrer">
                   <Linkedin />
                 </a>
               </div>
@@ -88,9 +86,8 @@ export const ContactSection = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-card p-8 rounded-lg shadow-xs">
+          <div className="md:w-1/2 bg-card p-6 sm:p-8 rounded-lg shadow-xs">
             <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
-
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-2">
@@ -102,7 +99,7 @@ export const ContactSection = () => {
                   name="name"
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Pedro Machado..."
+                  placeholder="John Doe..."
                 />
               </div>
 
@@ -116,7 +113,7 @@ export const ContactSection = () => {
                   name="email"
                   required
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="john@gmail.com"
+                  placeholder="john@example.com"
                 />
               </div>
 

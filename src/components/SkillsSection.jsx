@@ -40,7 +40,7 @@ const skills = [
 const categories = ["all", "frontend", "backend", "cloud", "AI", "tools"];
 
 export const SkillsSection = () => {
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("all"); // default tab = all
 
   const filteredSkills = skills.filter(
     (skill) => activeCategory === "all" || skill.category === activeCategory
@@ -84,18 +84,18 @@ export const SkillsSection = () => {
           ))}
         </div>
 
-        {/* Skills Grid with Scroll-triggered animation */}
+        {/* Skills Grid with Scrollable on Mobile */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-auto sm:overflow-x-visible"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }} // triggers when 30% visible
+          viewport={{ once: true, amount: 0.3 }}
         >
           {filteredSkills.map((skill, key) => (
             <motion.div
               key={key}
-              className="bg-card p-6 rounded-lg shadow-xs card-hover"
+              className="bg-card p-6 rounded-lg shadow-xs card-hover min-w-[200px]"
               variants={skillVariants}
             >
               <div className="text-left mb-4">
