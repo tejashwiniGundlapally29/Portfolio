@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, isValidMotionProp } from "framer-motion";
 import CountUp from "react-countup";
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "react-responsive";
 
 const skills = [
   // Frontend
@@ -40,11 +41,20 @@ const skills = [
 const categories = ["all", "frontend", "backend", "cloud", "AI", "tools"];
 
 export const SkillsSection = () => {
-  const [activeCategory, setActiveCategory] = useState("all"); // default tab = all
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [filteredSkills, setFilteredSkills] = useState(skills);
 
-  const filteredSkills = skills.filter(
-    (skill) => activeCategory === "all" || skill.category === activeCategory
-  );
+  // Detect mobile screens
+  const isMobile = useMediaQuery({ maxWidth: 640 });
+
+  // Update filtered skills whenever the category changes
+  useEffect(() => {
+    if (activeCategory === "all") {
+      setFilteredSkills(skills);
+    } else {
+      setFilteredSkills(skills.filter(skill => skill.category === activeCategory));
+    }
+  }, [activeCategory]);
 
   const containerVariants = {
     hidden: {},
@@ -84,41 +94,54 @@ export const SkillsSection = () => {
           ))}
         </div>
 
-        {/* Skills Grid with Scrollable on Mobile */}
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-auto sm:overflow-x-visible"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          {filteredSkills.map((skill, key) => (
-            <motion.div
-              key={key}
-              className="bg-card p-6 rounded-lg shadow-xs card-hover min-w-[200px]"
-              variants={skillVariants}
-            >
-              <div className="text-left mb-4">
-                <h3 className="font-semibold text-lg">{skill.name}</h3>
+        {/* Skills Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredSkills.map((skill, key) =>
+            isMobile ? (
+              // On mobile, render without motion
+              <div
+                key={key}
+                className="bg-card p-6 rounded-lg shadow-xs card-hover"
+              >
+                <div className="text-left mb-4">
+                  <h3 className="font-semibold text-lg">{skill.name}</h3>
+                </div>
+                <div className="w-full bg-secondary/50 h-2 rounded-full overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-primary to-blue-500 h-2 rounded-full"
+                    style={{ width: skill.level + "%" }}
+                  />
+                </div>
+                <div className="text-right mt-1">
+                  <CountUp start={0} end={skill.level} duration={1.2} suffix="%" />
+                </div>
               </div>
-
-              {/* Progress Bar */}
-              <div className="w-full bg-secondary/50 h-2 rounded-full overflow-hidden">
-                <motion.div
-                  className="bg-gradient-to-r from-primary to-blue-500 h-2 rounded-full origin-left"
-                  initial={{ width: 0 }}
-                  animate={{ width: skill.level + "%" }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
-                />
-              </div>
-
-              {/* Percentage */}
-              <div className="text-right mt-1">
-                <CountUp start={0} end={skill.level} duration={1.2} suffix="%" />
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            ) : (
+              <motion.div
+                key={key}
+                className="bg-card p-6 rounded-lg shadow-xs card-hover"
+                variants={skillVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <div className="text-left mb-4">
+                  <h3 className="font-semibold text-lg">{skill.name}</h3>
+                </div>
+                <div className="w-full bg-secondary/50 h-2 rounded-full overflow-hidden">
+                  <motion.div
+                    className="bg-gradient-to-r from-primary to-blue-500 h-2 rounded-full origin-left"
+                    initial={{ width: 0 }}
+                    animate={{ width: skill.level + "%" }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                  />
+                </div>
+                <div className="text-right mt-1">
+                  <CountUp start={0} end={skill.level} duration={1.2} suffix="%" />
+                </div>
+              </motion.div>
+            )
+          )}
+        </div>
       </div>
     </section>
   );
